@@ -1,2 +1,2 @@
-# mg-LunarLander
-A small traning game to present monogame
+# monogame-training
+Monogame lesson training
