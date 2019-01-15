@@ -17,6 +17,24 @@ namespace _02.Pong
         int speedY;
         int screenHeight;
 
+        public int X
+        {
+            get
+            {
+                return rect.X;
+            }
+        }
+
+        public int Y
+        {
+            get
+            {
+                return rect.Y;
+            }
+        }
+
+        public int Radius { get { return rect.Width / 2; } }
+
         public Ball(int x, int y, int speedX, int speedY, int screenHeight)
         {
             rect = new Rectangle(x, y, 64, 64);
@@ -46,6 +64,18 @@ namespace _02.Pong
                 rect.Y = screenHeight - 64;
                 speedY = -speedY;
             }
+        }
+
+        public void PaddleBounce(int newX)
+        {
+            speedX = -speedX;
+            rect.X = newX;
+        }
+
+        public void Reset()
+        {
+            rect.X = 100;
+            rect.Y = 100;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

@@ -32,7 +32,7 @@ namespace _02.Pong
         {
             ball = new Ball(100, 100, 300, 300, GraphicsDevice.Viewport.Height);
             leftPaddle = new Paddle(0, 100, 200, GraphicsDevice.Viewport.Height);
-            rightPaddle = new AIPaddle(GraphicsDevice.Viewport.Width - 32, 300, 200, GraphicsDevice.Viewport.Height);
+            rightPaddle = new AIPaddle(GraphicsDevice.Viewport.Width - 32, 300, 200, GraphicsDevice.Viewport.Height, ball);
 
             base.Initialize();
         }
@@ -69,15 +69,43 @@ namespace _02.Pong
                 Exit();
 
             double delta = gameTime.ElapsedGameTime.TotalSeconds;
-
-            // Ball
+            
             ball.Update(gameTime);
             leftPaddle.Update(gameTime);
             rightPaddle.Update(gameTime);
 
+            BallPaddleCollision();
+            BallOutCheck();
+
             base.Update(gameTime);
         }
 
+        void BallPaddleCollision()
+        {
+            if (ball.X < leftPaddle.Width)
+            {
+                if (ball.Y >= leftPaddle.Y && ball.Y <= leftPaddle.Y + leftPaddle.Height)
+                {
+                    ball.PaddleBounce(leftPaddle.Width);
+                }
+            }
+            if (ball.X + ball.Radius * 2 > rightPaddle.X)
+            {
+                if (ball.Y >= rightPaddle.Y && ball.Y <= rightPaddle.Y + rightPaddle.Height)
+                {
+                    ball.PaddleBounce(rightPaddle.X - ball.Radius * 2);
+                }
+            }
+        }
+
+        void BallOutCheck()
+        {
+            if(ball.X < -ball.Radius || ball.X > GraphicsDevice.Viewport.Width)
+            {
+                ball.Reset();
+            } 
+        }
+            
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>

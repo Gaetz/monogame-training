@@ -13,9 +13,14 @@ namespace _02.Pong
     public class Paddle
     {
         Texture2D texture;
-        Rectangle rect;
-        int speed;
+        protected Rectangle rect;
+        protected int speed;
         int screenHeight;
+
+        public int X { get { return rect.X; } }
+        public int Y { get { return rect.Y; } }
+        public int Width { get { return rect.Width; } }
+        public int Height { get { return rect.Height; } }
 
         public Paddle(int x, int y, int speed, int screenHeight)
         {
