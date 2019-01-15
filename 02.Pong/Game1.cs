@@ -12,6 +12,10 @@ namespace _02.Pong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Ball ball;
+        Paddle leftPaddle;
+        AIPaddle rightPaddle;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -26,7 +30,9 @@ namespace _02.Pong
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            ball = new Ball(100, 100, 300, 300, GraphicsDevice.Viewport.Height);
+            leftPaddle = new Paddle(0, 100, 200, GraphicsDevice.Viewport.Height);
+            rightPaddle = new AIPaddle(GraphicsDevice.Viewport.Width - 32, 300, 200, GraphicsDevice.Viewport.Height);
 
             base.Initialize();
         }
@@ -37,10 +43,10 @@ namespace _02.Pong
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            ball.Load(Content);
+            leftPaddle.Load(Content);
+            rightPaddle.Load(Content);
         }
 
         /// <summary>
@@ -62,7 +68,12 @@ namespace _02.Pong
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            double delta = gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Ball
+            ball.Update(gameTime);
+            leftPaddle.Update(gameTime);
+            rightPaddle.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -75,7 +86,11 @@ namespace _02.Pong
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Draw()
+            spriteBatch.Begin();
+            ball.Draw(gameTime, spriteBatch);
+            leftPaddle.Draw(gameTime, spriteBatch);
+            rightPaddle.Draw(gameTime, spriteBatch);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
