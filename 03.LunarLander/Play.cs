@@ -12,6 +12,7 @@ namespace LunarLander
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Lander lander;
+        Paddle paddle;
 
         public Play()
         {
@@ -28,6 +29,7 @@ namespace LunarLander
         protected override void Initialize()
         {
             lander = new Lander();
+            paddle = new Paddle(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
             base.Initialize();
 
@@ -42,6 +44,7 @@ namespace LunarLander
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             lander.Load(Content);
+            paddle.Load(Content);
         }
 
         /// <summary>
@@ -77,7 +80,8 @@ namespace LunarLander
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            lander.Draw(spriteBatch);
+            lander.Draw(gameTime, spriteBatch);
+            paddle.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
             base.Draw(gameTime);

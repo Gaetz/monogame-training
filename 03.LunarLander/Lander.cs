@@ -19,34 +19,33 @@ namespace LunarLander
             rotation = (float)-Math.PI / 2;
         }
 
+        const float PROPULSION = -180f;
+        const float GRAVITY = 98.1f;
+        const float ROTATE_SPEED = 1f;
+
         float x;
         float y;
         float rotation;
         float vx;
         float vy;
-        float propulsion = 10f;
-        float gravity = 98.1f;
-        float rotateSpeed = 2f;
         bool isFireOn;
         Texture2D image;
         Texture2D fireImage;
 
-        public void Load(ContentManager Content)
+        public void Load(ContentManager content)
         {
-            image = Content.Load<Texture2D>("lander");
-            fireImage = Content.Load<Texture2D>("lander-fire");
+            image = content.Load<Texture2D>("lander");
+            fireImage = content.Load<Texture2D>("lander-fire");
         }
 
         public void Update(GameTime gameTime)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if(Keyboard.GetState().IsKeyDown(Keys.Up))
+            if(Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 isFireOn = true;
-                double xForce = Math.Cos(rotation) * propulsion;
-                double yForce = Math.Sin(rotation) * propulsion;
-                vx += (float)xForce;
-                vy += (float)yForce;
+                vx += (float)Math.Cos(rotation) * Math.Abs(PROPULSION) * dt;
+                vy += (float)Math.Sin(rotation) * Math.Abs(PROPULSION) * dt;
             }
             else
             {
@@ -54,25 +53,28 @@ namespace LunarLander
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                rotation += rotateSpeed * dt;
+                rotation -= ROTATE_SPEED * dt;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                rotation -= rotateSpeed * dt;
+                rotation += ROTATE_SPEED * dt;
             }
-
-            vy += gravity * dt;
+            
+            vy += GRAVITY * dt;
             x += vx * dt;
             y += vy * dt;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Rectangle rect = new Rectangle((int)Math.Round(x), (int)Math.Round(y), image.Width, image.Height);
-            Rectangle fireRect = new Rectangle((int)Math.Round(x), (int)Math.Round(y), fireImage.Width, fireImage.Height);
+            Rectangle rect = new Rectangle((int)x, (int)y, image.Width, image.Height);
             spriteBatch.Draw(image, rect, null, Color.White, rotation, new Vector2(rect.Width / 2, image.Height / 2), SpriteEffects.None, 0);
+
+            Rectangle fireRect = new Rectangle((int)x, (int)y, fireImage.Width, fireImage.Height);
             if(isFireOn)
+            {
                 spriteBatch.Draw(fireImage, fireRect, null, Color.White, rotation, new Vector2(rect.Width / 2, image.Height / 2), SpriteEffects.None, 0);
+            }
         }
     }
 }
