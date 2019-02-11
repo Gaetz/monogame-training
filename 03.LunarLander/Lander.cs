@@ -32,6 +32,55 @@ namespace LunarLander
         Texture2D image;
         Texture2D fireImage;
 
+        const float MAX_VERTICAL_SPEED = 25;
+        const float MAX_HORIZONTAL_SPEED = 10;
+        const float MAX_ROTATION = (float)(5 * Math.PI / 180);
+
+        public Rectangle Rect
+        {
+            get
+            {
+                return new Rectangle((int)x - image.Width / 2, (int)y - image.Height / 2, image.Width, image.Height);
+            }
+        }
+
+        public bool IsLandingOk
+        {
+            get
+            {
+                      return vy >= 0
+                    && Math.Abs(vx) < MAX_HORIZONTAL_SPEED
+                    && Math.Abs(vy) < MAX_VERTICAL_SPEED
+                    && Math.Abs(rotation + Math.PI / 2) < MAX_ROTATION;
+            }
+        }
+
+        public float Rotation
+        {
+            get
+            {
+                double rad = rotation + Math.PI / 2;
+                return (float)Math.Round(rad * 180 / Math.PI, 2);
+            }
+        }
+
+        public float Vx
+        {
+            get
+            {
+                return (float)Math.Round(vx, 2);
+            }
+        }
+
+        public float Vy
+        {
+            get
+            {
+                return (float)Math.Round(vy, 2);
+            }
+        }
+
+
         public void Load(ContentManager content)
         {
             image = content.Load<Texture2D>("lander");

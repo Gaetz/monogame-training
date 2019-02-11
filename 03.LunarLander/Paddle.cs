@@ -22,6 +22,14 @@ namespace LunarLander
         Random random;
         const int MINIMUM_HEIGHT = 300;
 
+        public Rectangle Rect
+        {
+            get
+            {
+                return new Rectangle(x - ox, y - oy, image.Width, image.Height);
+            }
+        }
+
         public Paddle(int screenWidth, int screenHeight)
         {
             this.screenWidth = screenWidth;
@@ -34,6 +42,8 @@ namespace LunarLander
             image = content.Load<Texture2D>("paddle");
             x = random.Next(image.Width / 2, screenWidth - image.Width / 2);
             y = random.Next(MINIMUM_HEIGHT, screenHeight - image.Height);
+            ox = image.Width / 2;
+            oy = 0;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

@@ -49,3 +49,10 @@
 /processorParam:TextureFormat=Color
 /build:paddle.png
 
+#begin uiFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:uiFont.spritefont
+

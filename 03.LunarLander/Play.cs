@@ -13,6 +13,12 @@ namespace LunarLander
         SpriteBatch spriteBatch;
         Lander lander;
         Paddle paddle;
+        int outcome;
+
+        UIText rotationUI;
+        UIText vxUI;
+        UIText vyUI;
+        UIText resultUI;
 
         public Play()
         {
@@ -30,9 +36,13 @@ namespace LunarLander
         {
             lander = new Lander();
             paddle = new Paddle(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            outcome = -1;
+            rotationUI = new UIText(20, 10, "Rotation", "0");
+            vxUI = new UIText(20, 40, "H-Speed", "0");
+            vyUI = new UIText(20, 70, "V-Speed", "0");
+            resultUI = new UIText(20, 100, "", "");
 
             base.Initialize();
-
         }
 
         /// <summary>
@@ -45,6 +55,11 @@ namespace LunarLander
             spriteBatch = new SpriteBatch(GraphicsDevice);
             lander.Load(Content);
             paddle.Load(Content);
+
+            rotationUI.Load(Content);
+            vxUI.Load(Content);
+            vyUI.Load(Content);
+            resultUI.Load(Content);
         }
 
         /// <summary>
@@ -66,9 +81,43 @@ namespace LunarLander
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            lander.Update(gameTime);
+            if (outcome == -1)
+            {
+                lander.Update(gameTime);
+                outcome = LandCheck();
+
+                rotationUI.Text = lander.Rotation.ToString();
+                vxUI.Text = lander.Vx.ToString();
+                vyUI.Text = lander.Vy.ToString();
+            }
+            else if (outcome == 0)
+            {
+                resultUI.Text = "Success";
+            }
+            else if (outcome == 1)
+             {
+                resultUI.Text = "Failure";
+            }
 
             base.Update(gameTime);
+        }
+
+        int LandCheck()
+        {
+            if (lander.Rect.Intersects(paddle.Rect))
+            {
+                if (lander.Rect.X >= paddle.Rect.X 
+                    && lander.Rect.X + lander.Rect.Width <= paddle.Rect.X + paddle.Rect.Width 
+                    && lander.IsLandingOk)
+                {
+                    return 0; // Landing ok
+                }
+                else
+                {
+                    return 1; // Landing ko
+                }
+            }
+            return -1; // No landing
         }
 
         /// <summary>
@@ -82,6 +131,11 @@ namespace LunarLander
 
             lander.Draw(gameTime, spriteBatch);
             paddle.Draw(gameTime, spriteBatch);
+
+            rotationUI.Draw(gameTime, spriteBatch);
+            vxUI.Draw(gameTime, spriteBatch);
+            vyUI.Draw(gameTime, spriteBatch);
+            resultUI.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
             base.Draw(gameTime);
