@@ -72,7 +72,7 @@ namespace _04.TopDownAdventure
         {
             if (Visible)
             {
-                Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
+                Rectangle rect = new Rectangle((int)X, (int)Y, image.Width, image.Height);
                 spriteBatch.Draw(image, rect, null, Color, Rotation, new Vector2(Ox, Oy), SpriteEffects.None, 0);
             }
         }

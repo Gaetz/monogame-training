@@ -12,6 +12,8 @@ namespace _04.TopDownAdventure
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Hero link;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,6 +29,7 @@ namespace _04.TopDownAdventure
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            link = new Hero(100, 100, "hero");
 
             base.Initialize();
         }
@@ -39,6 +42,8 @@ namespace _04.TopDownAdventure
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            link.Load(Content);
 
             // TODO: use this.Content to load your game content here
         }
@@ -63,6 +68,7 @@ namespace _04.TopDownAdventure
                 Exit();
 
             // TODO: Add your update logic here
+            link.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -75,7 +81,11 @@ namespace _04.TopDownAdventure
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            link.Draw(gameTime, spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
