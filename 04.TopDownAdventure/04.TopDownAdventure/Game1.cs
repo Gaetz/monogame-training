@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace _04.TopDownAdventure
 {
@@ -13,7 +14,9 @@ namespace _04.TopDownAdventure
         SpriteBatch spriteBatch;
 
         Hero link;
-        Projectile energyWave;
+        List<Projectile> projectiles = new List<Projectile>();
+        float cooldownCounter = 0;
+        const float COOLDOWN = 0.1f;
 
         public Game1()
         {
@@ -69,15 +72,26 @@ namespace _04.TopDownAdventure
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            cooldownCounter += dt;
+
             // TODO: Add your update logic here
             link.Update(gameTime);
+            
 
             KeyboardState ks = Keyboard.GetState();
-            if(ks.IsKeyDown(Keys.Space))
+            if(ks.IsKeyDown(Keys.Space) && cooldownCounter > COOLDOWN)
             {
-                energyWave = new Projectile(link);
+                Projectile energyWave = new Projectile(link);
                 energyWave.Load(Content);
                 energyWave.Visible = true;
+                projectiles.Add(energyWave);
+                cooldownCounter = 0;
+            }
+
+            foreach (Projectile p in projectiles)
+            {
+                p.Update(gameTime);
             }
 
             base.Update(gameTime);
@@ -94,9 +108,10 @@ namespace _04.TopDownAdventure
             spriteBatch.Begin();
 
             link.Draw(gameTime, spriteBatch);
-            if (energyWave != null)
+
+            foreach (Projectile p in projectiles)
             {
-                energyWave.Draw(gameTime, spriteBatch);
+                p.Draw(gameTime, spriteBatch);
             }
 
 

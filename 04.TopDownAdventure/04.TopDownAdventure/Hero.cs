@@ -10,6 +10,8 @@ namespace _04.TopDownAdventure
 {
     class Hero : Sprite
     {
+        public int Direction { get; set; }
+
         Vector2 speed;
         const float ACCELERATION = 500;
         const float DECELLERATION = 0.95f;
@@ -17,6 +19,7 @@ namespace _04.TopDownAdventure
 
         public Hero(int x, int y, string path) : base(x, y, path)
         {
+            Direction = 6;
             Visible = true;
         }
 
@@ -26,18 +29,22 @@ namespace _04.TopDownAdventure
             KeyboardState ks = Keyboard.GetState();
             if (ks.IsKeyDown(Keys.Down))
             {
+                Direction = 2;
                 speed.Y += ACCELERATION * dt;
             }
             if (ks.IsKeyDown(Keys.Up))
             {
+                Direction = 8;
                 speed.Y -= ACCELERATION * dt;
             }
             if (ks.IsKeyDown(Keys.Right))
             {
+                Direction = 6;
                 speed.X += ACCELERATION * dt;
             }
             if (ks.IsKeyDown(Keys.Left))
             {
+                Direction = 4;
                 speed.X -= ACCELERATION * dt;
             }
             
