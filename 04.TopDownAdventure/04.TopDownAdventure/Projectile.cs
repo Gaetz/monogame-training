@@ -8,7 +8,7 @@ namespace _04.TopDownAdventure
 {
     class Projectile : Sprite
     {
-        public Projectile(int x, int y, string path) : base(x, y, path)
+        public Projectile(Hero hero) : base("projectile_horizontal")
         {
 
         }

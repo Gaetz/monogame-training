@@ -13,6 +13,7 @@ namespace _04.TopDownAdventure
         SpriteBatch spriteBatch;
 
         Hero link;
+        Projectile energyWave;
 
         public Game1()
         {
@@ -30,6 +31,7 @@ namespace _04.TopDownAdventure
         {
             // TODO: Add your initialization logic here
             link = new Hero(100, 100, "hero");
+            
 
             base.Initialize();
         }
@@ -70,6 +72,14 @@ namespace _04.TopDownAdventure
             // TODO: Add your update logic here
             link.Update(gameTime);
 
+            KeyboardState ks = Keyboard.GetState();
+            if(ks.IsKeyDown(Keys.Space))
+            {
+                energyWave = new Projectile(link);
+                energyWave.Load(Content);
+                energyWave.Visible = true;
+            }
+
             base.Update(gameTime);
         }
 
@@ -79,11 +89,16 @@ namespace _04.TopDownAdventure
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
 
             link.Draw(gameTime, spriteBatch);
+            if (energyWave != null)
+            {
+                energyWave.Draw(gameTime, spriteBatch);
+            }
+
 
             spriteBatch.End();
 

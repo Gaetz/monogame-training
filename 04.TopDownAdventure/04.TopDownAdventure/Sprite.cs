@@ -63,6 +63,14 @@ namespace _04.TopDownAdventure
             Color = Color.White;
         }
 
+        public Sprite(string path)
+        {
+            X = 0;
+            Y = 0;
+            this.path = path;
+            Color = Color.White;
+        }
+
         public virtual void Load(ContentManager content)
         {
             image = content.Load<Texture2D>(path);
