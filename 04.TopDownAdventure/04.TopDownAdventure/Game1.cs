@@ -18,6 +18,25 @@ namespace _04.TopDownAdventure
         float cooldownCounter = 0;
         const float COOLDOWN = 0.1f;
 
+        Tileset tileset;
+        Tilemap tilemap;
+
+        int[][] tilemapData = new int[][]
+        {
+             new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        };
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -34,7 +53,8 @@ namespace _04.TopDownAdventure
         {
             // TODO: Add your initialization logic here
             link = new Hero(100, 100, "hero");
-            
+            tileset = new Tileset(1, 3, 40, "tileset");
+            tilemap = new Tilemap(tileset, tilemapData);
 
             base.Initialize();
         }
@@ -49,6 +69,7 @@ namespace _04.TopDownAdventure
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             link.Load(Content);
+            tilemap.Load(Content);
 
             // TODO: use this.Content to load your game content here
         }
@@ -107,6 +128,7 @@ namespace _04.TopDownAdventure
 
             spriteBatch.Begin();
 
+            tilemap.Draw(gameTime, spriteBatch);
             link.Draw(gameTime, spriteBatch);
 
             foreach (Projectile p in projectiles)
