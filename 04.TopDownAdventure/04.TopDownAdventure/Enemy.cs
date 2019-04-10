@@ -10,7 +10,7 @@ namespace _04.TopDownAdventure
     {
         public Enemy(int x, int y, string path) : base(x, y, path)
         {
-
+            Visible = true;
         }
     }
 }

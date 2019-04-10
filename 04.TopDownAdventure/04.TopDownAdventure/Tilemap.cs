@@ -31,14 +31,25 @@ namespace _04.TopDownAdventure
             {
                 for (int c = 0; c < data[r].Length ; c++)
                 {
-                    Rectangle drawRect = new Rectangle(c * tileset.Tilesize, r * tileset.Tilesize, tileset.Tilesize, tileset.Tilesize);
+                    Rectangle drawRect = new Rectangle(
+                        c * tileset.Tilesize, r * tileset.Tilesize, 
+                        tileset.Tilesize, tileset.Tilesize
+                    );
 
-                    int tilesetCoordX = data[r][c] % tileset.Cols;
-                    int tilesetCoordY = data[r][c] / tileset.Cols;
-                    Rectangle tileRect = new Rectangle(tilesetCoordX * tileset.Tilesize, tilesetCoordY * tileset.Tilesize, tileset.Tilesize, tileset.Tilesize);
-                    spriteBatch.Draw(tileset.Image, drawRect, tileRect, Color.White, 0, new Vector2(0, 0), SpriteEffects.None, 0);
+                    int index = data[r][c];
+                    int tilesetCoordX = index % tileset.Cols;
+                    int tilesetCoordY = index / tileset.Cols;
+                    Rectangle tileRect = new Rectangle(
+                        tilesetCoordX * tileset.Tilesize, tilesetCoordY * tileset.Tilesize, 
+                        tileset.Tilesize, tileset.Tilesize
+                    );
+
+                    spriteBatch.Draw(tileset.Image, drawRect, tileRect, 
+                        Color.White, 0, new Vector2(0, 0), SpriteEffects.None, 0);
                 }
             }
         }
+
+
     }
 }

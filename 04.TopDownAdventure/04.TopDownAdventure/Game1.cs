@@ -21,6 +21,8 @@ namespace _04.TopDownAdventure
         Tileset tileset;
         Tilemap tilemap;
 
+        List<Enemy> enemies = new List<Enemy>();
+
         int[][] tilemapData = new int[][]
         {
              new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -55,9 +57,17 @@ namespace _04.TopDownAdventure
             link = new Hero(100, 100, "hero");
             tileset = new Tileset(1, 3, 40, "tileset");
             tilemap = new Tilemap(tileset, tilemapData);
+            
+            Enemy enemy0 = new Enemy(400, 200, "enemy");
+            Enemy enemy1 = new Enemy(300, 300, "enemy");
+            enemies.Add(enemy0);
+            enemies.Add(enemy1);
 
             base.Initialize();
+
+            
         }
+
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -70,6 +80,10 @@ namespace _04.TopDownAdventure
 
             link.Load(Content);
             tilemap.Load(Content);
+            foreach (Enemy e in enemies)
+            {
+                e.Load(Content);
+            }
 
             // TODO: use this.Content to load your game content here
         }
@@ -113,9 +127,38 @@ namespace _04.TopDownAdventure
             foreach (Projectile p in projectiles)
             {
                 p.Update(gameTime);
+                foreach (Enemy e in enemies)
+                {
+                    if (CollisionSprites(e, p))
+                    {
+                        e.Visible = false;
+                        p.Visible = false;
+                    }
+                }
             }
 
+            for (int i = enemies.Count - 1; i >= 0; i--)
+            {
+                if(!enemies[i].Visible)
+                {
+                    enemies.RemoveAt(i);
+                }
+            }
+
+
+
             base.Update(gameTime);
+        }
+
+        bool CollisionSprites(Sprite e, Sprite p)
+        {
+            // Si collision
+            if (e.Rect.Intersects(p.Rect))
+            {
+                return true;
+            }
+            // sinon
+            return false;
         }
 
         /// <summary>
@@ -129,7 +172,14 @@ namespace _04.TopDownAdventure
             spriteBatch.Begin();
 
             tilemap.Draw(gameTime, spriteBatch);
+
+            foreach (Enemy e in enemies)
+            {
+                e.Draw(gameTime, spriteBatch);
+            }
+
             link.Draw(gameTime, spriteBatch);
+            
 
             foreach (Projectile p in projectiles)
             {
