@@ -19,7 +19,7 @@ namespace _04.TopDownAdventure
         public bool Visible { get; set; }
         public Color Color { get; set; }
 
-        Texture2D image;
+        protected Texture2D image;
         string path;
 
         public Vector2 Position

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace _04.TopDownAdventure
 {
-    class Hero : Sprite
+    class Hero2 : Sprite
     {
         public int Direction { get; set; }
 
@@ -23,7 +23,7 @@ namespace _04.TopDownAdventure
         const float DECELLERATION = 0.95f;
         const float MAX_SPEED = 400;
 
-        public Hero(int x, int y, string path) : base(x, y, path)
+        public Hero2(int x, int y, string path) : base(x, y, path)
         {
             speed = new Vector2();
             Direction = 6;
@@ -34,58 +34,55 @@ namespace _04.TopDownAdventure
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             KeyboardState ks = Keyboard.GetState();
+
+            int speedX = 0;
+            int speedY = 0;
             if (ks.IsKeyDown(Keys.Down))
             {
                 Direction = 2;
-                speed.Y += ACCELERATION * dt;
+                Y += 5;
+                speedY = 5;
             }
             if (ks.IsKeyDown(Keys.Up))
             {
                 Direction = 8;
-                speed.Y -= ACCELERATION * dt;
+                Y -= 5;
+                speedY = -5;
             }
             if (ks.IsKeyDown(Keys.Right))
             {
                 Direction = 6;
-                speed.X += ACCELERATION * dt;
+                X += 5;
+                speedX = 5;
             }
             if (ks.IsKeyDown(Keys.Left))
             {
                 Direction = 4;
-                speed.X -= ACCELERATION * dt;
+                X -= 5;
+                speedX = -5;
             }
-            
-            Speed *= DECELLERATION;
-            
-
-            if (Speed.X > 0) speed.X = Math.Min(MAX_SPEED, Speed.X);
-            if (Speed.X < 0) speed.X = Math.Max(-MAX_SPEED, Speed.X);
-            if (Speed.Y > 0) speed.Y = Math.Min(MAX_SPEED, Speed.Y);
-            if (Speed.Y < 0) speed.Y = Math.Max(-MAX_SPEED, Speed.Y);
 
             // Collision
-
             bool firstCollision = false;
             bool secondCollision = false;
-
             float collisionOx = X;
             float collisionOy = Y;
+
             // Premiere collision
             if (Direction == 6 || Direction == 2)
             {
                 collisionOx += image.Width;
                 collisionOy += image.Height;
-            }
-            int nextTileCol = (int)Math.Floor((collisionOx + Speed.X * dt) / (float)tilemap.Tileset.Tilesize);
-            int nextTileRow = (int)Math.Floor((collisionOy + Speed.Y * dt) / (float)tilemap.Tileset.Tilesize);
-
+            } 
+            int nextTileCol = (int)Math.Floor((collisionOx + speedX) / (float)tilemap.Tileset.Tilesize);
+            int nextTileRow = (int)Math.Floor((collisionOy + speedY) / (float)tilemap.Tileset.Tilesize);
             int tile = tilemap.Data[nextTileRow][nextTileCol];
             if (tile == 1)
             {
                 firstCollision = true;
             }
 
-            // Deuxieme collision
+            // Seconde collision
             if (Direction == 2)
             {
                 collisionOx -= image.Width;
@@ -111,16 +108,12 @@ namespace _04.TopDownAdventure
                 secondCollision = true;
             }
 
-            // Resolution 
+            // Resolution
             if (firstCollision || secondCollision)
             {
-                speed.X = 0;
-                speed.Y = 0;
+                X += -speedX;
+                Y += -speedY;
             }
-
-
-            // Move
-            Position += Speed * dt;
         }
     }
 }

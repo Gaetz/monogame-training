@@ -111,7 +111,7 @@ namespace _04.TopDownAdventure
             cooldownCounter += dt;
 
             // TODO: Add your update logic here
-            link.Update(gameTime);
+            link.Update(gameTime, tilemap);
             
 
             KeyboardState ks = Keyboard.GetState();

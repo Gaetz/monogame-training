@@ -11,6 +11,22 @@ namespace _04.TopDownAdventure
 {
     class Tilemap
     {
+        public Tileset Tileset
+        {
+            get
+            {
+                return tileset;
+            }
+        }
+
+        public int[][] Data
+        {
+            get
+            {
+                return data;
+            }
+        }
+
         Tileset tileset;
         int[][] data;
 
