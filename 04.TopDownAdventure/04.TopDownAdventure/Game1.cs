@@ -13,17 +13,11 @@ namespace _04.TopDownAdventure
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Hero link;
-        List<Projectile> projectiles = new List<Projectile>();
-        float cooldownCounter = 0;
-        const float COOLDOWN = 0.1f;
+        SceneMap level01;
+        SceneMap level02;
+        SceneMap currentScene;
 
-        Tileset tileset;
-        Tilemap tilemap;
-
-        List<Enemy> enemies = new List<Enemy>();
-
-        int[][] tilemapData = new int[][]
+        int[][] tilemapData01 = new int[][]
         {
              new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
              new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
@@ -34,6 +28,22 @@ namespace _04.TopDownAdventure
              new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
              new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
              new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        };
+
+        int[][] tilemapData02 = new int[][]
+{
+             new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+             new int[] { 1, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
              new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
              new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
              new int[] { 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -53,19 +63,25 @@ namespace _04.TopDownAdventure
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            link = new Hero(100, 100, "hero");
-            tileset = new Tileset(1, 3, 40, "tileset");
-            tilemap = new Tilemap(tileset, tilemapData);
-            
             Enemy enemy0 = new Enemy(400, 200, "enemy");
             Enemy enemy1 = new Enemy(300, 300, "enemy");
-            enemies.Add(enemy0);
-            enemies.Add(enemy1);
+            List<Enemy> enemies01 = new List<Enemy>();
+            enemies01.Add(enemy0);
+            enemies01.Add(enemy1);
+
+            Enemy enemy2 = new Enemy(200, 300, "enemy");
+            Enemy enemy3 = new Enemy(50, 400, "enemy");
+            Enemy enemy4 = new Enemy(550, 100, "enemy");
+            List<Enemy> enemies02 = new List<Enemy>();
+            enemies02.Add(enemy2);
+            enemies02.Add(enemy3);
+            enemies02.Add(enemy4);
+
+            level01 = new SceneMap(tilemapData01, enemies01, "tileset");
+            level02 = new SceneMap(tilemapData02, enemies02, "tileset");
+            currentScene = level01;
 
             base.Initialize();
-
-            
         }
 
 
@@ -78,14 +94,7 @@ namespace _04.TopDownAdventure
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            link.Load(Content);
-            tilemap.Load(Content);
-            foreach (Enemy e in enemies)
-            {
-                e.Load(Content);
-            }
-
-            // TODO: use this.Content to load your game content here
+            currentScene.Load(Content);
         }
 
         /// <summary>
@@ -107,60 +116,16 @@ namespace _04.TopDownAdventure
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            cooldownCounter += dt;
-
-            // TODO: Add your update logic here
-            link.Update(gameTime, tilemap);
-            
-
-            KeyboardState ks = Keyboard.GetState();
-            if(ks.IsKeyDown(Keys.Space) && cooldownCounter > COOLDOWN)
-            {
-                Projectile energyWave = new Projectile(link);
-                energyWave.Load(Content);
-                energyWave.Visible = true;
-                projectiles.Add(energyWave);
-                cooldownCounter = 0;
-            }
-
-            foreach (Projectile p in projectiles)
-            {
-                p.Update(gameTime);
-                foreach (Enemy e in enemies)
-                {
-                    if (CollisionSprites(e, p))
-                    {
-                        e.Visible = false;
-                        p.Visible = false;
-                    }
-                }
-            }
-
-            for (int i = enemies.Count - 1; i >= 0; i--)
-            {
-                if(!enemies[i].Visible)
-                {
-                    enemies.RemoveAt(i);
-                }
-            }
-
-
+            currentScene.Update(gameTime);
 
             base.Update(gameTime);
         }
 
-        bool CollisionSprites(Sprite e, Sprite p)
+        public void ChangeScene(SceneMap scene)
         {
-            // Si collision
-            if (e.Rect.Intersects(p.Rect))
-            {
-                return true;
-            }
-            // sinon
-            return false;
+            currentScene = scene;
         }
-
+        
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -168,27 +133,11 @@ namespace _04.TopDownAdventure
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
             spriteBatch.Begin();
 
-            tilemap.Draw(gameTime, spriteBatch);
-
-            foreach (Enemy e in enemies)
-            {
-                e.Draw(gameTime, spriteBatch);
-            }
-
-            link.Draw(gameTime, spriteBatch);
-            
-
-            foreach (Projectile p in projectiles)
-            {
-                p.Draw(gameTime, spriteBatch);
-            }
-
+            currentScene.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
-
             base.Draw(gameTime);
         }
     }

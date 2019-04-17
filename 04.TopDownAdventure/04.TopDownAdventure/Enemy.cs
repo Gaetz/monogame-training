@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _04.TopDownAdventure
 {
-    class Enemy : Sprite
+    public class Enemy : Sprite
     {
         public Enemy(int x, int y, string path) : base(x, y, path)
         {
