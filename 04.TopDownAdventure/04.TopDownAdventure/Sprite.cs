@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace _04.TopDownAdventure
 {
-    public class Sprite
+    class Sprite
     {
         public float X { get; set; }
         public float Y { get; set; }

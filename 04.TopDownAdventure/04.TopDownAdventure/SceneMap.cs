@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace _04.TopDownAdventure
 {
-    public class SceneMap
+    class SceneMap
     {
         Hero link;
         List<Projectile> projectiles = new List<Projectile>();
@@ -23,14 +23,19 @@ namespace _04.TopDownAdventure
         List<Enemy> enemies;
 
         ContentManager content;
+        Game1 game;
 
-        public SceneMap(int[][] tilemapData, List<Enemy> enemies, string tilesetPath)
+        public delegate void ChangeSceneFunc();
+        ChangeSceneFunc changeScene;
+
+        public SceneMap(int[][] tilemapData, List<Enemy> enemies, string tilesetPath, ChangeSceneFunc changeScene)
         {
             link = new Hero(100, 100, "hero");
             tileset = new Tileset(1, 3, 40, tilesetPath);
             tilemap = new Tilemap(tileset, tilemapData);
 
             this.enemies = enemies;
+            this.changeScene = changeScene;
         }
 
         public void Load(ContentManager content)
@@ -83,6 +88,11 @@ namespace _04.TopDownAdventure
                 {
                     enemies.RemoveAt(i);
                 }
+            }
+
+            if(enemies.Count == 0)
+            {
+                changeScene();
             }
         }
 

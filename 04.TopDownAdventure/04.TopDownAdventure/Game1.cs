@@ -77,13 +77,21 @@ namespace _04.TopDownAdventure
             enemies02.Add(enemy3);
             enemies02.Add(enemy4);
 
-            level01 = new SceneMap(tilemapData01, enemies01, "tileset");
-            level02 = new SceneMap(tilemapData02, enemies02, "tileset");
+            level01 = new SceneMap(tilemapData01, enemies01, "tileset", () => ChangeScene(level02));
+            level02 = new SceneMap(tilemapData02, enemies02, "tileset", () => ChangeScene(null));
             currentScene = level01;
 
             base.Initialize();
         }
 
+        void ChangeScene(SceneMap scene)
+        {
+            if (scene != null)
+            {
+                scene.Load(Content);
+                currentScene = scene;
+            }
+        }
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -119,11 +127,6 @@ namespace _04.TopDownAdventure
             currentScene.Update(gameTime);
 
             base.Update(gameTime);
-        }
-
-        public void ChangeScene(SceneMap scene)
-        {
-            currentScene = scene;
         }
         
         /// <summary>
