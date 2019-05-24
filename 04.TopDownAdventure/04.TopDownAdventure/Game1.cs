@@ -15,7 +15,8 @@ namespace _04.TopDownAdventure
 
         SceneMap level01;
         SceneMap level02;
-        SceneMap currentScene;
+        Scene currentScene;
+        SceneGameOver gameover;
 
         int[][] tilemapData01 = new int[][]
         {
@@ -77,18 +78,27 @@ namespace _04.TopDownAdventure
             enemies02.Add(enemy3);
             enemies02.Add(enemy4);
 
+            gameover = new SceneGameOver();
+
             level01 = new SceneMap(tilemapData01, enemies01, "tileset", () => ChangeScene(level02));
             level02 = new SceneMap(tilemapData02, enemies02, "tileset", () => ChangeScene(null));
             currentScene = level01;
 
+
             base.Initialize();
         }
 
-        void ChangeScene(SceneMap scene)
+        public void SceneToGameOver()
+        {
+            gameover.Load(Content, this);
+            currentScene = gameover;
+        }
+
+        void ChangeScene(Scene scene)
         {
             if (scene != null)
             {
-                scene.Load(Content);
+                scene.Load(Content, this);
                 currentScene = scene;
             }
         }
@@ -102,7 +112,7 @@ namespace _04.TopDownAdventure
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            currentScene.Load(Content);
+            currentScene.Load(Content, this);
         }
 
         /// <summary>

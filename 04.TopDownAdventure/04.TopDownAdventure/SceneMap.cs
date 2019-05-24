@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace _04.TopDownAdventure
 {
-    class SceneMap
+    class SceneMap: Scene
     {
         Hero link;
         List<Projectile> projectiles = new List<Projectile>();
@@ -22,12 +22,6 @@ namespace _04.TopDownAdventure
 
         List<Enemy> enemies;
 
-        ContentManager content;
-        Game1 game;
-
-        public delegate void ChangeSceneFunc();
-        ChangeSceneFunc changeScene;
-
         public SceneMap(int[][] tilemapData, List<Enemy> enemies, string tilesetPath, ChangeSceneFunc changeScene)
         {
             link = new Hero(100, 100, "hero");
@@ -38,8 +32,9 @@ namespace _04.TopDownAdventure
             this.changeScene = changeScene;
         }
 
-        public void Load(ContentManager content)
+        public override void Load(ContentManager content, Game1 game)
         {
+            this.game = game;
             this.content = content;
 
             link.Load(content);
@@ -50,7 +45,7 @@ namespace _04.TopDownAdventure
             }
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             cooldownCounter += dt;
@@ -69,7 +64,12 @@ namespace _04.TopDownAdventure
                 cooldownCounter = 0;
             }
 
-            foreach (Projectile p in projectiles)
+            if (ks.IsKeyDown(Keys.G))
+            {
+                game.SceneToGameOver();
+            }
+
+                foreach (Projectile p in projectiles)
             {
                 p.Update(gameTime);
                 foreach (Enemy e in enemies)
@@ -108,7 +108,7 @@ namespace _04.TopDownAdventure
             return false;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             tilemap.Draw(gameTime, spriteBatch);
             foreach (Enemy e in enemies)
